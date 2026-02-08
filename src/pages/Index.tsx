@@ -4,7 +4,6 @@ import {
   Activity,
   Image,
   History,
-  Settings,
   Camera,
   FileDown,
   FileJson,
@@ -16,7 +15,7 @@ import ScrollStack, { ScrollStackItem } from "@/components/ScrollStack";
 
 const mainCards = [
   {
-    to: "/analyze",
+    to: "/analysis",
     icon: Activity,
     title: "Analyze Movement",
     desc: "Upload trainer & user videos for AI biomechanical analysis",
@@ -36,28 +35,12 @@ const mainCards = [
     desc: "Review your previous sessions and progress",
     glow: false,
   },
-  // {
-  //   to: "#",
-  //   icon: Settings,
-  //   title: "Settings",
-  //   desc: "Configure API endpoints and preferences",
-  //   glow: false,
-  // },
-];
-
-const extraFeatures = [
-  { icon: Camera, label: "Real-Time Webcam Mode" },
-  { icon: FileDown, label: "Download Full Report" },
-  { icon: FileJson, label: "Export Skeleton Data" },
-  { icon: Share2, label: "Share Analysis Link" },
-  { icon: Gauge, label: "Confidence Score Gauge" },
 ];
 
 export default function Index() {
   return (
     <div className="min-h-screen relative bg-background">
       {/* --- BACKGROUND LAYER --- */}
-      {/* Moved outside sections and set to 'fixed' to cover full screen always */}
       <div className="fixed inset-0 pointer-events-none w-full h-full z-0">
         <LiquidEther
           mouseForce={20}
@@ -75,10 +58,9 @@ export default function Index() {
       </div>
 
       {/* --- CONTENT LAYER --- */}
-      {/* Added 'relative z-10' to all sections to ensure they sit ON TOP of the background */}
-      
-      {/* Hero */}
-      <section className="relative z-10 overflow-hidden pt-24 pb-0 md:pt-36 md:pb-6">
+
+      {/* Hero Section: Increased z-index to z-30 to stay above the negative margin overlap */}
+      <section className="relative z-30 overflow-hidden pt-24 pb-0 md:pt-36 md:pb-6">
         <div className="container mx-auto px-4 relative">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -104,17 +86,17 @@ export default function Index() {
               Advanced computer vision for real-time exercise form analysis. Compare your technique against expert trainers and get instant AI feedback.
             </p>
 
-            <div className="flex flex-wrap justify-center gap-3">
+            <div className="flex flex-wrap justify-center gap-3 relative z-40">
               <Link
-                to="/analyze"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 neon-glow transition-all"
+                to="/analysis"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 neon-glow transition-all cursor-pointer"
               >
                 <Activity className="w-4 h-4" />
                 Start Analysis
               </Link>
               <Link
                 to="/generate"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl glass text-foreground font-semibold hover:bg-secondary transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl glass text-foreground font-semibold hover:bg-secondary transition-all cursor-pointer"
               >
                 <Image className="w-4 h-4" />
                 Generate Image
@@ -124,16 +106,17 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Scroll Stack Section */}
+      {/* Scroll Stack Section: Kept at z-10 so the Hero stays on top */}
       <section className="relative z-10 w-full -mt-40">
         <ScrollStack>
-          {mainCards.map((card, i) => (
+          {mainCards.map((card) => (
             <ScrollStackItem className="h-[400px] max-w-4xl" key={card.title}>
-              <Link to={card.to} className="group block w-full">
+              <Link to={card.to} className="group block w-full cursor-pointer">
                 <div className="flex flex-col items-center gap-6">
                   <div
-                    className={`w-24 h-24 rounded-3xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-all duration-500 ${card.glow ? "neon-glow" : ""
-                      }`}
+                    className={`w-24 h-24 rounded-3xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-all duration-500 ${
+                      card.glow ? "neon-glow" : ""
+                    }`}
                   >
                     <card.icon className="w-10 h-10 text-primary" />
                   </div>
@@ -152,21 +135,9 @@ export default function Index() {
         </ScrollStack>
       </section>
 
-      {/* Quick features */}
       <section className="container mx-auto px-4 pb-20 relative z-10">
         <div className="max-w-4xl mx-auto">
-
-          {/* <div className="flex flex-wrap justify-center gap-2">
-            {extraFeatures.map((f) => (
-              <div
-                key={f.label}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg glass text-xs text-muted-foreground hover:text-foreground cursor-default transition-colors"
-              >
-                <f.icon className="w-3.5 h-3.5" />
-                {f.label}
-              </div>
-            ))}
-          </div> */}
+          {/* Quick features could go here */}
         </div>
       </section>
     </div>

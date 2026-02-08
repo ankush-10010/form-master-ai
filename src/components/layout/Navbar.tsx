@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navItems = [
-  { to: "/analyze", label: "Analyze Movement", icon: Activity },
+  { to: "/analysis", label: "Analyze Movement", icon: Activity },
   { to: "/generate", label: "Generate Image", icon: Image },
   { to: "#", label: "History", icon: History },
   { to: "#", label: "Docs", icon: HelpCircle },
@@ -34,11 +34,10 @@ export default function Navbar() {
               <Link
                 key={item.label}
                 to={item.to}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  active
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${active
                     ? "bg-primary/15 text-primary neon-border"
                     : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-                }`}
+                  }`}
               >
                 <item.icon className="w-4 h-4" />
                 {item.label}

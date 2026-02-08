@@ -20,7 +20,7 @@ const App = () => (
         <Routes>
           <Route element={<AppLayout />}>
             <Route path="/" element={<Index />} />
-            <Route path="/analyze" element={<AnalyzeMovement />} />
+            <Route path="/analysis" element={<AnalyzeMovement />} />
             <Route path="/generate" element={<GenerateImage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
