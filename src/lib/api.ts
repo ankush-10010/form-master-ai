@@ -4,7 +4,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://independently-una
 
 const ANALYZE_MOVEMENT_URL = import.meta.env.VITE_ANALYZE_MOVEMENT_URL || `${BASE_URL}/analyze_movement`;
 const ANALYZE_MOVEMENT_URL_WITHOUT_TRAINER = import.meta.env.VITE_ANALYZE_MOVEMENT_URL_WITHOUT_TRAINER || `${BASE_URL}/analyze_without_video`;
-const GENERATE_IMAGE_URL = import.meta.env.VITE_GENERATE_IMAGE_URL || `${BASE_URL}/generate-image`;
+const GENERATE_IMAGE_URL = import.meta.env.VITE_GENERATE_IMAGE_URL || "https://ankushraj2024--maskedbar-pipeline-full-imagepipeline-web-4b6c7d.modal.run";
 const LOGIN_URL = import.meta.env.VITE_LOGIN_URL || `${BASE_URL}/login`;
 const SIGNUP_URL = import.meta.env.VITE_SIGNUP_URL || `${BASE_URL}/signup`;
 const CHAT_URL = import.meta.env.VITE_CHAT_URL || `${BASE_URL}/chat`;
@@ -24,7 +24,7 @@ export interface AnalysisFrame {
 
 export interface AnalysisResponse {
   analysis: AnalysisFrame[];
-  reps : number,
+  reps: number,
   feedback_summary: string;
   technical_details: { title: string; description: string }[];
 }
@@ -86,24 +86,21 @@ export async function analyzeMovementWithoutTrainer(
 // ----------- //
 
 export async function generateImage(
-  userImage: File,
-  exerciseName: string,
-  errorDescription?: string
-): Promise<GenerateImageResponse> {
+  image: File,
+  prompt: string
+): Promise<Blob> {
   const formData = new FormData();
-  formData.append("user_image", userImage);
-  formData.append("exercise_name", exerciseName);
-  if (errorDescription) {
-    formData.append("error_description", errorDescription);
-  }
+  formData.append("image", image);
+  formData.append("prompt", prompt);
 
   if (!GENERATE_IMAGE_URL) {
     throw new Error("Generate Image URL is not configured");
   }
 
   // Post directly to the function URL
-  const response = await api.post<GenerateImageResponse>(GENERATE_IMAGE_URL, formData, {
+  const response = await api.post(GENERATE_IMAGE_URL, formData, {
     headers: { "Content-Type": "multipart/form-data" },
+    responseType: "blob",
   });
 
   return response.data;
