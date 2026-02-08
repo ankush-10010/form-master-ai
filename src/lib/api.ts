@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://mc240041024--example-flux-analyze-movement-dev.modal.run";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -19,7 +19,7 @@ export interface AnalysisFrame {
 export interface AnalysisResponse {
   analysis: AnalysisFrame[];
   feedback_summary: string;
-  technical_details: string[];
+  technical_details: { title: string; description: string }[];
 }
 
 export interface GenerateImageResponse {
@@ -30,12 +30,14 @@ export async function analyzeMovement(
   trainerVideo: File,
   userVideo: File,
   exerciseName: string,
+  email: string,
   onProgress?: (progress: number) => void
 ): Promise<AnalysisResponse> {
   const formData = new FormData();
   formData.append("trainer_video", trainerVideo);
   formData.append("user_video", userVideo);
   formData.append("exercise_name", exerciseName);
+  formData.append("email", email);
 
   const response = await api.post<AnalysisResponse>("/analyze_movement", formData, {
     headers: { "Content-Type": "multipart/form-data" },

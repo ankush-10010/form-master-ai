@@ -27,7 +27,7 @@ export default function AnalyzeMovement() {
     setLoading(true);
     setUploadProgress(0);
     try {
-      const data = await analyzeMovement(trainerVideo, userVideo, exerciseName, setUploadProgress);
+      const data = await analyzeMovement(trainerVideo, userVideo, exerciseName, "anksushraj2024@gmail.com", setUploadProgress);
       setResult(data);
     } catch (err: any) {
       toast({
@@ -143,7 +143,9 @@ export default function AnalyzeMovement() {
                       {result.technical_details.map((d, i) => (
                         <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
                           <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
-                          {d}
+                          <span>
+                            <strong className="font-semibold text-foreground">{d.title}:</strong> {d.description}
+                          </span>
                         </li>
                       ))}
                     </ul>
