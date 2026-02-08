@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Activity, RotateCcw, Play, Loader2, ChevronDown } from "lucide-react";
 import VideoUploader from "@/components/shared/VideoUploader";
 import FrameCard from "@/components/shared/FrameCard";
-import { analyzeMovement, type AnalysisResponse } from "@/lib/api";
+import { analyzeMovement, analyzeMovementWithoutTrainer, type AnalysisResponse} from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 // Make sure to point this to the correct location of your Galaxy component
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -72,6 +72,32 @@ export default function AnalyzeMovement() {
     setUploadProgress(0);
     try {
       const data = await analyzeMovement(trainerVideo, userVideo, exerciseName, "anksushraj2024@gmail.com", setUploadProgress);
+      console.log(data);
+      setResult(data);
+    } catch (err: any) {
+      toast({
+        title: "Analysis failed",
+        description: err?.message || "Could not reach the backend.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAnalyzeWithoutTrainer = async () => {
+    if ( !userVideo || !exerciseName.trim()) {
+      toast({
+        title: "Missing inputs",
+        description: "Please provide both videos and an exercise name.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setLoading(true);
+    setUploadProgress(0);
+    try {
+      const data = await analyzeMovementWithoutTrainer( userVideo, exerciseName, "anksushraj2024@gmail.com", setUploadProgress);
       setResult(data);
     } catch (err: any) {
       toast({
@@ -190,6 +216,7 @@ export default function AnalyzeMovement() {
             </div>
 
             <div className="flex flex-wrap gap-3">
+              {/*  */}
               <button
                 onClick={handleAnalyze}
                 disabled={loading}
@@ -198,6 +225,16 @@ export default function AnalyzeMovement() {
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
                 Analyze Movement
               </button>
+              {/*  */}
+              <button
+                onClick={handleAnalyzeWithoutTrainer}
+                disabled={loading}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 neon-glow transition-all disabled:opacity-50"
+              >
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
+                Analyze Movement Without Trainer
+              </button>
+              {/*  */}
               <button
                 onClick={handleReset}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl glass bg-white/5 text-white font-medium hover:bg-white/10 transition-all border border-white/10"
@@ -262,6 +299,12 @@ export default function AnalyzeMovement() {
                     </div>
                   )}
                 </div>
+
+                {result.reps > 0 && 
+                    <div>
+                      <h3>Rep count : </h3> <p> {result.reps} </p>
+                    </div>
+                }
 
                 {/* Frame cards */}
                 <h2 className="font-heading text-lg font-bold text-white mb-4">
