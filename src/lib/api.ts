@@ -1,9 +1,10 @@
 import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://mc240041024--example-flux-analyze-movement-dev.modal.run";
+// Separate URLs for different Modal functions
+const ANALYZE_MOVEMENT_URL = import.meta.env.VITE_ANALYZE_MOVEMENT_URL || "https://mc240041024--example-flux-gymtrainer-analyze-movement-dev.modal.run";
+const GENERATE_IMAGE_URL = import.meta.env.VITE_GENERATE_IMAGE_URL || "";
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
   timeout: 300000, // 5 min for large video uploads
 });
 
@@ -39,7 +40,8 @@ export async function analyzeMovement(
   formData.append("exercise_name", exerciseName);
   formData.append("email", email);
 
-  const response = await api.post<AnalysisResponse>("/analyze_movement", formData, {
+  // Post directly to the function URL, no path appending
+  const response = await api.post<AnalysisResponse>(ANALYZE_MOVEMENT_URL, formData, {
     headers: { "Content-Type": "multipart/form-data" },
     onUploadProgress: (e) => {
       if (e.total && onProgress) {
@@ -63,7 +65,12 @@ export async function generateImage(
     formData.append("error_description", errorDescription);
   }
 
-  const response = await api.post<GenerateImageResponse>("/generate-image", formData, {
+  if (!GENERATE_IMAGE_URL) {
+    throw new Error("Generate Image URL is not configured");
+  }
+
+  // Post directly to the function URL
+  const response = await api.post<GenerateImageResponse>(GENERATE_IMAGE_URL, formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
 
