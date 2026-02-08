@@ -2,9 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Loader2, GripVertical } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import axios from "axios";
-
-const CHAT_URL = import.meta.env.VITE_CHAT_URL || "/chat";
+import { sendChatMessage } from "@/lib/api";
 
 interface Message {
   role: "user" | "assistant";
@@ -34,8 +32,8 @@ export default function ChatBot() {
     setMessages((prev) => [...prev, userMsg]);
     setLoading(true);
     try {
-      const res = await axios.post(CHAT_URL, { message: text });
-      const reply = res.data?.response || res.data?.text || res.data?.message || JSON.stringify(res.data);
+      const res = await sendChatMessage(text);
+      const reply = res?.response || res?.text || res?.message || JSON.stringify(res);
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch {
       setMessages((prev) => [...prev, { role: "assistant", content: "Sorry, could not reach the server." }]);
