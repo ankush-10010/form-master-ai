@@ -3,6 +3,7 @@ import axios from "axios";
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://independently-unapplauded-azzie.ngrok-free.dev";
 
 const ANALYZE_MOVEMENT_URL = import.meta.env.VITE_ANALYZE_MOVEMENT_URL || `${BASE_URL}/analyze_movement`;
+const ANALYZE_MOVEMENT_URL_WITHOUT_TRAINER = import.meta.env.VITE_ANALYZE_MOVEMENT_URL_WITHOUT_TRAINER || `${BASE_URL}/analyze_without_video`;
 const GENERATE_IMAGE_URL = import.meta.env.VITE_GENERATE_IMAGE_URL || `${BASE_URL}/generate-image`;
 const LOGIN_URL = import.meta.env.VITE_LOGIN_URL || `${BASE_URL}/login`;
 const SIGNUP_URL = import.meta.env.VITE_SIGNUP_URL || `${BASE_URL}/signup`;
@@ -23,6 +24,7 @@ export interface AnalysisFrame {
 
 export interface AnalysisResponse {
   analysis: AnalysisFrame[];
+  reps : number,
   feedback_summary: string;
   technical_details: { title: string; description: string }[];
 }
@@ -56,6 +58,32 @@ export async function analyzeMovement(
 
   return response.data;
 }
+
+// ---------- // 
+export async function analyzeMovementWithoutTrainer(
+  userVideo: File,
+  exerciseName: string,
+  email: string,
+  onProgress?: (progress: number) => void
+): Promise<AnalysisResponse> {
+  const formData = new FormData();
+  formData.append("user_video", userVideo);
+  formData.append("exercise_name", exerciseName);
+  formData.append("email", email);
+
+  // Post directly to the function URL, no path appending
+  const response = await api.post<AnalysisResponse>(ANALYZE_MOVEMENT_URL_WITHOUT_TRAINER, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+    onUploadProgress: (e) => {
+      if (e.total && onProgress) {
+        onProgress(Math.round((e.loaded / e.total) * 100));
+      }
+    },
+  });
+
+  return response.data;
+}
+// ----------- //
 
 export async function generateImage(
   userImage: File,
