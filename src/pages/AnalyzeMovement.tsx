@@ -6,12 +6,54 @@ import FrameCard from "@/components/shared/FrameCard";
 import { analyzeMovement, type AnalysisResponse } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 // Make sure to point this to the correct location of your Galaxy component
-import Galaxy from "@/components/Galaxy"; 
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import Galaxy from "@/components/Galaxy";
+
+const exercises = [
+  "Barbell Biceps Curl",
+  "Bench Press",
+  "Chest Fly Machine",
+  "Deadlift",
+  "Decline Bench Press",
+  "Hammer Curl",
+  "Hip Thrust",
+  "Incline Bench Press",
+  "Lat Pulldown",
+  "Lateral Raise",
+  "Leg Extension",
+  "Leg Raises",
+  "Plank",
+  "Pull Up",
+  "Push-up",
+  "Romanian Deadlift",
+  "Russian Twist",
+  "Shoulder Press",
+  "Squat",
+  "T Bar Row",
+  "Tricep Dips",
+  "Tricep Pushdown",
+];
 
 export default function AnalyzeMovement() {
   const [trainerVideo, setTrainerVideo] = useState<File | null>(null);
   const [userVideo, setUserVideo] = useState<File | null>(null);
   const [exerciseName, setExerciseName] = useState("");
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [result, setResult] = useState<AnalysisResponse | null>(null);
@@ -53,7 +95,7 @@ export default function AnalyzeMovement() {
   return (
     // 1. Outer wrapper ensuring full screen height and black background
     <div className="relative min-h-screen w-full overflow-hidden bg-black text-foreground">
-      
+
       {/* 2. Background Layer: Galaxy Component */}
       <div className="absolute inset-0 z-0">
         {/* We use width/height 100% here to fill the screen instead of fixed 1080px */}
@@ -96,14 +138,55 @@ export default function AnalyzeMovement() {
             </div>
 
             <div className="mb-6">
-              <label className="text-sm font-medium text-gray-200 mb-2 block">Exercise Name</label>
-              <input
-                type="text"
-                value={exerciseName}
-                onChange={(e) => setExerciseName(e.target.value)}
-                placeholder="Bench Press, Squat, Deadlift…"
-                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-              />
+              <label className="text-sm font-medium text-gray-200 mb-2 block">
+                Exercise Name
+              </label>
+              <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={open}
+                    className="w-full justify-between bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white"
+                  >
+                    {exerciseName
+                      ? exercises.find((exercise) => exercise === exerciseName)
+                      : "Select exercise..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[--radix-popover-trigger-width] p-0 bg-black/90 border-white/10 text-white">
+                  <Command className="bg-transparent text-white">
+                    <CommandInput placeholder="Search exercise..." className="text-white placeholder:text-gray-500" />
+                    <CommandList>
+                      <CommandEmpty>No exercise found.</CommandEmpty>
+                      <CommandGroup>
+                        {exercises.map((exercise) => (
+                          <CommandItem
+                            key={exercise}
+                            value={exercise}
+                            onSelect={(currentValue) => {
+                              // cmdk returns the value in lowercase, so we need to find the original casing
+                              const originalVideo = exercises.find((e) => e.toLowerCase() === currentValue.toLowerCase()) || currentValue;
+                              setExerciseName(originalVideo === exerciseName ? "" : originalVideo)
+                              setOpen(false)
+                            }}
+                            className="text-gray-200 aria-selected:bg-white/10 aria-selected:text-white"
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                exerciseName === exercise ? "opacity-100" : "opacity-0"
+                              )}
+                            />
+                            {exercise}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </div>
 
             <div className="flex flex-wrap gap-3">
