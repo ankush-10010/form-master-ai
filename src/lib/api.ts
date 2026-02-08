@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Separate URLs for different Modal functions
-const ANALYZE_MOVEMENT_URL = import.meta.env.VITE_ANALYZE_MOVEMENT_URL || "https://mc240041024--example-flux-gymtrainer-analyze-movement-dev.modal.run";
+const ANALYZE_MOVEMENT_URL = import.meta.env.VITE_ANALYZE_MOVEMENT_URL || "https://independently-unapplauded-azzie.ngrok-free.dev/analyze_movement";
 const GENERATE_IMAGE_URL = import.meta.env.VITE_GENERATE_IMAGE_URL || "";
 
 const api = axios.create({

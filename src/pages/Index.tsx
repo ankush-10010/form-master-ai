@@ -12,6 +12,7 @@ import {
   Gauge,
 } from "lucide-react";
 import LiquidEther from "@/components/LiquidEther";
+import ScrollStack, { ScrollStackItem } from "@/components/ScrollStack";
 
 const mainCards = [
   {
@@ -54,28 +55,31 @@ const extraFeatures = [
 
 export default function Index() {
   return (
-    <div className="min-h-screen">
-      {/* Hero */}
-      <section className="relative overflow-hidden py-24 md:py-36">
-        {/* Background effects */}
-        {/* Background effects */}
-        <div className="absolute inset-0 pointer-events-none w-full h-full">
-          <LiquidEther
-            mouseForce={20}
-            cursorSize={100}
-            isViscous
-            viscous={30}
-            colors={["#29d4ff", "#a09eff", "#a3f0cf"]}
-            autoDemo
-            autoSpeed={0.5}
-            autoIntensity={2.2}
-            isBounce={false}
-            resolution={0.5}
-            className="w-full h-full"
-          />
-        </div>
+    <div className="min-h-screen relative bg-background">
+      {/* --- BACKGROUND LAYER --- */}
+      {/* Moved outside sections and set to 'fixed' to cover full screen always */}
+      <div className="fixed inset-0 pointer-events-none w-full h-full z-0">
+        <LiquidEther
+          mouseForce={20}
+          cursorSize={100}
+          isViscous
+          viscous={30}
+          colors={["#29d4ff", "#a09eff", "#a3f0cf"]}
+          autoDemo
+          autoSpeed={0.5}
+          autoIntensity={2.2}
+          isBounce={false}
+          resolution={0.5}
+          className="w-full h-full"
+        />
+      </div>
 
-        <div className="container mx-auto px-4 relative z-10">
+      {/* --- CONTENT LAYER --- */}
+      {/* Added 'relative z-10' to all sections to ensure they sit ON TOP of the background */}
+      
+      {/* Hero */}
+      <section className="relative z-10 overflow-hidden pt-24 pb-0 md:pt-36 md:pb-6">
+        <div className="container mx-auto px-4 relative">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -120,38 +124,36 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Main cards */}
-      <section className="container mx-auto px-4 pb-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+      {/* Scroll Stack Section */}
+      <section className="relative z-10 w-full -mt-40">
+        <ScrollStack>
           {mainCards.map((card, i) => (
-            <motion.div
-              key={card.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 + i * 0.1 }}
-            >
-              <Link
-                to={card.to}
-                className={`block p-6 rounded-2xl glass hover-lift group ${card.glow ? "neon-border" : ""
-                  }`}
-              >
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                    <card.icon className="w-6 h-6 text-primary" />
+            <ScrollStackItem className="h-[400px] max-w-4xl" key={card.title}>
+              <Link to={card.to} className="group block w-full">
+                <div className="flex flex-col items-center gap-6">
+                  <div
+                    className={`w-24 h-24 rounded-3xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-all duration-500 ${card.glow ? "neon-glow" : ""
+                      }`}
+                  >
+                    <card.icon className="w-10 h-10 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-heading font-bold text-foreground mb-1">{card.title}</h3>
-                    <p className="text-sm text-muted-foreground">{card.desc}</p>
+                    <h2 className="font-heading text-3xl md:text-5xl font-bold text-foreground mb-4">
+                      {card.title}
+                    </h2>
+                    <p className="text-lg text-muted-foreground max-w-md mx-auto leading-relaxed">
+                      {card.desc}
+                    </p>
                   </div>
                 </div>
               </Link>
-            </motion.div>
+            </ScrollStackItem>
           ))}
-        </div>
+        </ScrollStack>
       </section>
 
       {/* Quick features */}
-      <section className="container mx-auto px-4 pb-20">
+      <section className="container mx-auto px-4 pb-20 relative z-10">
         <div className="max-w-4xl mx-auto">
           <h3 className="text-xs uppercase tracking-widest text-muted-foreground mb-4 text-center">
             Extensible Features

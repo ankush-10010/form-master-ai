@@ -136,11 +136,11 @@ export default function AnalyzeMovement() {
                   Session Summary
                 </h2>
                 <p className="text-foreground mb-4">{result.feedback_summary}</p>
-                {result.technical_details.length > 0 && (
+                {result.technical_details?.length > 0 && (
                   <div>
                     <h3 className="text-sm font-semibold text-foreground mb-2">Technical Corrections</h3>
                     <ul className="space-y-1">
-                      {result.technical_details.map((d, i) => (
+                      {result.technical_details?.map((d, i) => (
                         <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
                           <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
                           <span>
@@ -155,10 +155,10 @@ export default function AnalyzeMovement() {
 
               {/* Frame cards */}
               <h2 className="font-heading text-lg font-bold text-foreground mb-4">
-                Frame Analysis ({result.analysis.length} frames)
+                Frame Analysis ({result.analysis?.length || 0} frames)
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {result.analysis.map((frame, i) => (
+                {result.analysis?.map((frame, i) => (
                   <FrameCard key={frame.frame_id} frame={frame} index={i} />
                 ))}
               </div>
