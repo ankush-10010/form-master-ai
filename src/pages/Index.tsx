@@ -36,13 +36,13 @@ const mainCards = [
     desc: "Review your previous sessions and progress",
     glow: false,
   },
-  {
-    to: "#",
-    icon: Settings,
-    title: "Settings",
-    desc: "Configure API endpoints and preferences",
-    glow: false,
-  },
+  // {
+  //   to: "#",
+  //   icon: Settings,
+  //   title: "Settings",
+  //   desc: "Configure API endpoints and preferences",
+  //   glow: false,
+  // },
 ];
 
 const extraFeatures = [
@@ -155,10 +155,8 @@ export default function Index() {
       {/* Quick features */}
       <section className="container mx-auto px-4 pb-20 relative z-10">
         <div className="max-w-4xl mx-auto">
-          <h3 className="text-xs uppercase tracking-widest text-muted-foreground mb-4 text-center">
-            Extensible Features
-          </h3>
-          <div className="flex flex-wrap justify-center gap-2">
+
+          {/* <div className="flex flex-wrap justify-center gap-2">
             {extraFeatures.map((f) => (
               <div
                 key={f.label}
@@ -168,7 +166,7 @@ export default function Index() {
                 {f.label}
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
       </section>
     </div>
