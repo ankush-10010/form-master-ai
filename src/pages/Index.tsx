@@ -11,6 +11,7 @@ import {
   Share2,
   Gauge,
 } from "lucide-react";
+import LiquidEther from "@/components/LiquidEther";
 
 const mainCards = [
   {
@@ -57,9 +58,21 @@ export default function Index() {
       {/* Hero */}
       <section className="relative overflow-hidden py-24 md:py-36">
         {/* Background effects */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[120px]" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-primary/3 blur-[100px]" />
+        {/* Background effects */}
+        <div className="absolute inset-0 pointer-events-none w-full h-full">
+          <LiquidEther
+            mouseForce={20}
+            cursorSize={100}
+            isViscous
+            viscous={30}
+            colors={["#29d4ff", "#a09eff", "#a3f0cf"]}
+            autoDemo
+            autoSpeed={0.5}
+            autoIntensity={2.2}
+            isBounce={false}
+            resolution={0.5}
+            className="w-full h-full"
+          />
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
@@ -119,9 +132,8 @@ export default function Index() {
             >
               <Link
                 to={card.to}
-                className={`block p-6 rounded-2xl glass hover-lift group ${
-                  card.glow ? "neon-border" : ""
-                }`}
+                className={`block p-6 rounded-2xl glass hover-lift group ${card.glow ? "neon-border" : ""
+                  }`}
               >
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
