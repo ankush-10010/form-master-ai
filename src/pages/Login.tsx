@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { LogIn, Mail, Lock, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
+import { loginUser } from "@/lib/api";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,13 +19,13 @@ export default function Login() {
     }
     setLoading(true);
     try {
-      // Placeholder: replace with real auth
-      localStorage.setItem("user", JSON.stringify({ email }));
+      const data = await loginUser(email, password);
+      localStorage.setItem("user", JSON.stringify({ email, ...data }));
       window.dispatchEvent(new Event("auth-change"));
       toast({ title: "Welcome back!", description: `Logged in as ${email}` });
       navigate("/");
-    } catch {
-      toast({ title: "Login failed", description: "Invalid credentials.", variant: "destructive" });
+    } catch (err: any) {
+      toast({ title: "Login failed", description: err?.response?.data?.detail || "Invalid credentials.", variant: "destructive" });
     } finally {
       setLoading(false);
     }

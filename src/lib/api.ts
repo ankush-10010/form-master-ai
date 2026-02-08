@@ -1,11 +1,15 @@
 import axios from "axios";
 
-// Separate URLs for different Modal functions
-const ANALYZE_MOVEMENT_URL = import.meta.env.VITE_ANALYZE_MOVEMENT_URL || "https://independently-unapplauded-azzie.ngrok-free.dev/analyze_movement";
-const GENERATE_IMAGE_URL = import.meta.env.VITE_GENERATE_IMAGE_URL || "";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://independently-unapplauded-azzie.ngrok-free.dev";
+
+const ANALYZE_MOVEMENT_URL = import.meta.env.VITE_ANALYZE_MOVEMENT_URL || `${BASE_URL}/analyze_movement`;
+const GENERATE_IMAGE_URL = import.meta.env.VITE_GENERATE_IMAGE_URL || `${BASE_URL}/generate-image`;
+const LOGIN_URL = import.meta.env.VITE_LOGIN_URL || `${BASE_URL}/login`;
+const SIGNUP_URL = import.meta.env.VITE_SIGNUP_URL || `${BASE_URL}/signup`;
+const CHAT_URL = import.meta.env.VITE_CHAT_URL || `${BASE_URL}/chat`;
 
 const api = axios.create({
-  timeout: 300000, // 5 min for large video uploads
+  timeout: 300000,
 });
 
 export interface AnalysisFrame {
@@ -77,4 +81,20 @@ export async function generateImage(
   return response.data;
 }
 
+export async function loginUser(email: string, password: string) {
+  const response = await api.post(LOGIN_URL, { email, password });
+  return response.data;
+}
+
+export async function signupUser(email: string, password: string) {
+  const response = await api.post(SIGNUP_URL, { email, password });
+  return response.data;
+}
+
+export async function sendChatMessage(message: string) {
+  const response = await api.post(CHAT_URL, { message });
+  return response.data;
+}
+
+export { CHAT_URL, LOGIN_URL, SIGNUP_URL };
 export default api;

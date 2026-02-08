@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { UserPlus, Mail, Lock, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
+import { signupUser } from "@/lib/api";
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,13 +24,13 @@ export default function Signup() {
     }
     setLoading(true);
     try {
-      // Placeholder: replace with real auth
-      localStorage.setItem("user", JSON.stringify({ email }));
+      const data = await signupUser(email, password);
+      localStorage.setItem("user", JSON.stringify({ email, ...data }));
       window.dispatchEvent(new Event("auth-change"));
       toast({ title: "Account created!", description: `Welcome, ${email}` });
       navigate("/");
-    } catch {
-      toast({ title: "Signup failed", description: "Could not create account.", variant: "destructive" });
+    } catch (err: any) {
+      toast({ title: "Signup failed", description: err?.response?.data?.detail || "Could not create account.", variant: "destructive" });
     } finally {
       setLoading(false);
     }
