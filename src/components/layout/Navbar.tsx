@@ -1,7 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
-import { Activity, Image, History, HelpCircle, Menu, X } from "lucide-react";
+import { Activity, Image, History, HelpCircle, Menu, X, LogIn, LogOut } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/hooks/useAuth";
 
 const navItems = [
   { to: "/analysis", label: "Analyze Movement", icon: Activity },
@@ -13,6 +14,7 @@ const navItems = [
 export default function Navbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass-strong">
@@ -44,6 +46,24 @@ export default function Navbar() {
               </Link>
             );
           })}
+
+          {user ? (
+            <button
+              onClick={logout}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary transition-all ml-2"
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 transition-all ml-2"
+            >
+              <LogIn className="w-4 h-4" />
+              Login
+            </Link>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -76,6 +96,24 @@ export default function Navbar() {
                   {item.label}
                 </Link>
               ))}
+              {user ? (
+                <button
+                  onClick={() => { logout(); setMobileOpen(false); }}
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary transition-all"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Logout
+                </button>
+              ) : (
+                <Link
+                  to="/login"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-primary hover:bg-secondary transition-all"
+                >
+                  <LogIn className="w-4 h-4" />
+                  Login
+                </Link>
+              )}
             </div>
           </motion.div>
         )}

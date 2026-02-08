@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Expand, AlertTriangle } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 import ScoreGauge from "./ScoreGauge";
 import type { AnalysisFrame } from "@/lib/api";
 import { useState } from "react";
@@ -59,9 +60,13 @@ export default function FrameCard({ frame, index }: FrameCardProps) {
         <div className="space-y-3">
           <div className="flex items-start gap-2">
             <AlertTriangle className="w-4 h-4 text-neon-orange mt-0.5 shrink-0" />
-            <p className="text-sm text-foreground">{frame.feedback}</p>
+            <div className="text-sm text-foreground prose prose-sm prose-invert max-w-none [&>p]:m-0">
+              <ReactMarkdown>{frame.feedback}</ReactMarkdown>
+            </div>
           </div>
-          <p className="text-xs text-muted-foreground leading-relaxed">{frame.technical_observation}</p>
+          <div className="text-xs text-muted-foreground leading-relaxed prose prose-xs prose-invert max-w-none [&>p]:m-0">
+            <ReactMarkdown>{frame.technical_observation}</ReactMarkdown>
+          </div>
         </div>
       </motion.div>
 
@@ -94,8 +99,12 @@ export default function FrameCard({ frame, index }: FrameCardProps) {
                 <p className="text-sm text-muted-foreground">Error Score: {frame.error_score}/100</p>
               </div>
             </div>
-            <p className="text-foreground mb-2">{frame.feedback}</p>
-            <p className="text-sm text-muted-foreground">{frame.technical_observation}</p>
+            <div className="text-foreground mb-2 prose prose-invert max-w-none">
+              <ReactMarkdown>{frame.feedback}</ReactMarkdown>
+            </div>
+            <div className="text-sm text-muted-foreground prose prose-sm prose-invert max-w-none">
+              <ReactMarkdown>{frame.technical_observation}</ReactMarkdown>
+            </div>
             <button
               onClick={() => setExpanded(false)}
               className="mt-6 px-4 py-2 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors text-sm"
